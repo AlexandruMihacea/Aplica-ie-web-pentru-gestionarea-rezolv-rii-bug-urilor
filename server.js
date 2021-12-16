@@ -68,6 +68,9 @@ app.put("/", async (req,res,next) => {
 })
 
 
+
+// Bugs
+
 router.route('/bugs')
     //get all bugs in the app
     .get(async (req, res, next) => {
@@ -89,7 +92,60 @@ router.route('/bugs')
             }
     })
 
-//TODO: PUT/DELETE   
+
+//Get bug by id and update user and status
+router.route("/bugs/:id")
+    .get(async(req,res,next) =>{
+        try{
+            const bug = await Bug.findByPk(req.params.id);
+            if(bug){
+                return res.status(200).json(bug);
+            }else{
+                return res.status(404).send("Nu a putut fii gasit");
+            }
+        }catch(err){
+            next(err);
+        }
+    })
+    .put(async(req,res,next) => {
+        try{
+            const bug = await Bug.findByPk(req.params.id);
+            if(bug){
+                bug.id_user = req.body.id_user;
+                bug.status = req.body.status;
+                await bug.save();
+                res.status(200).send("S-a efectuat Updatul");
+            }else{
+                res.status(404).send("Nu s-a putut face updatule!");
+            }
+        }catch(err){
+            next(err);
+        }
+    })
+
+//Delete bug
+router.route("/bugs/:id_bugs")
+    .delete(async(req,res,next) =>{
+        try{
+            const appDel = await Bug.destroy({
+                where:{
+                    id_bug: req.params.id_bugs, 
+                }
+            })
+            if(appDel){
+                return res.status(200).send("Bug deleted from database.");
+            }
+            else
+                res.status(404).send("Bug doesn't exist in the database.");
+            }catch(err){
+                next(err);
+            }
+    })
+
+  
+
+
+
 
 router.route("/projects")
     //get all projects in the database
@@ -124,6 +180,10 @@ router.route("/projects")
             next(err);
         }
     })
+
+
+
+    
 
 //TODO: tabela separata parola + id .  
 
@@ -172,6 +232,7 @@ router.route("/users")
             next(err);
         }
     })
+
 
 
 
@@ -294,4 +355,8 @@ app.listen(port, async()=> {
         console.log(err);
     }
 })
+
+
+
+
 
