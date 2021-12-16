@@ -142,8 +142,24 @@ router.route("/bugs/:id_bugs")
             }
     })
 
-  
 
+//Returneaza toate bug.urile dintr-o aplicatie
+router.route("/project/:id_app")
+    .get(async(req,res,next) =>{
+        try{
+            const bug = await Bug.findAll({where : {
+                id_app: req.params.id_app,
+            }});
+            if(bug){
+                return res.status(200).json(bug);
+            }else{
+                return res.status(404).send("Nu a putut fii gasit");
+            }
+        }catch(err){
+            next(err);
+        }
+    })
+  
 
 
 
