@@ -27,7 +27,24 @@ Aplicație web care permite raportarea, comunicarea și tracking-ul bug-urilor p
   -	Înregistrarea unui nou bug pentru o aplicație din baza de date folosind metodele de clasificare oferite de aplicație (nivel de severitate, prioritate, descriere și commit link)
 <br/>
 
+## Instrucţiuni de rulare
+
+După instalarea/ actualizarea pachetelor de dependințe,
+
+``` 
+npm i
+```
+
+serverul poate fi pornit prin comanda:
+
+``` 
+npm run backend
+```
+
+Au fost proiectate diferite endpoints care să corespundă cerințelor aplicației în dezvoltare, specificate în secțiunea de funcționalități propuse.
+De asemenea, proiectul include și fișierul BugApp.json, care poate fi folosit pentru testare, prin importare în Postman.
+<br/>
 ## Status proiect
   
-Etapa 1/3: Specificații detaliate, planul de proiect, prezența unui proiect în git
+Etapa 2/3: Serviciu RESTful funcțional în repository
 🐢
