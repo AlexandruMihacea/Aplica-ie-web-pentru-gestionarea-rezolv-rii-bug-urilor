@@ -13,10 +13,17 @@ module.exports = (sequelize, DataTypes) => {
             },
             name: {
                 type:DataTypes.STRING,
-                unique: true
+                unique: true,
+                allowNull: false,
+                validate: {
+                    len: {
+                        args: [2, 30],
+                        msg: 'The name must contain between 2 and 30 characters.'
+                    }
+                }
             },
             id_admin: {
-                type:DataTypes.INTEGER, // un id de user
+                type:DataTypes.INTEGER,
                 allowNull: false
             }
         }, 

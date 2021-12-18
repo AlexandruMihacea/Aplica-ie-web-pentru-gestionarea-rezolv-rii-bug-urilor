@@ -13,20 +13,24 @@ module.exports = (sequelize, DataTypes) => {
             username: {
                 type: DataTypes.STRING,
                 allowNull:false,
-                unique: true
+                unique: true,
+                validate: {
+                    min: { 
+                        args: [5],
+                        msg: "Username must be at least 5 characters long."
+                    }
+                }
             },
             email: {
                 type: DataTypes.STRING,
+                unique: true,
                 validate: {
-                    isEmail: true
+                    isEmail: {
+                        msg: "Not a valid email."
+                    }
                 },
-                allowNull:false,
-                unique: true
-            },
-            password: {
-                type: DataTypes.STRING,
-                allowNull: false
-            },
+                allowNull:false
+            }
         },
         {
             createdAt: false,

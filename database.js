@@ -5,9 +5,4 @@ const sequelize = new Sequelize({
     storage: "./sqlite/bugs.db"
 })
 
-// sequelize.sync({alter:true})
-//     .then(() => {
-//         console.log("Tables created.")
-//     })
-
 module.exports=sequelize;
