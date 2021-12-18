@@ -15,10 +15,10 @@ module.exports = (sequelize, DataTypes) => {
                 allowNull:false,
                 unique: true,
                 validate: {
-                    min: { 
-                        args: [5],
-                        msg: "Username must be at least 5 characters long."
-                    }
+                    len:{ 
+                            args: [5,20],
+                            msg: "Username must be at least 5 characters long."
+                        }  
                 }
             },
             email: {

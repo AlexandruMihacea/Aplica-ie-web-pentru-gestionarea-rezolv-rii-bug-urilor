@@ -13,8 +13,8 @@ module.exports = (sequelize, DataTypes) => {
             password: {
                 type: DataTypes.STRING,
                 validate: {
-                    min: {
-                        args: [9], //always pass them as array when you use args
+                    len: {
+                        args: [8,40], //always pass them as array when you use args
                         msg: "The password should have at least 8 characters."
                     }
                 }

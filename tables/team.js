@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
                 autoincrement: true
             },
             role: {
-                type: DataTypes.STRING
+                type: DataTypes.STRING,
+                defaultValue: "MP"
             }
         },
         {
