@@ -18,35 +18,43 @@ const style = {
   p: 4,
 };
 
-export default function ModalForm() {
-  const [open, setOpen] = useState(false);
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => setOpen(false);
+export default function FormBug({handleonClose, status}) {
+  const [visibility, setStatus] = useState(false);
+  const openHandle = () => setStatus(true);
+  const handleClose = () => setStatus(false);
 
   return (
     <div>
       <Modal
         aria-labelledby="transition-modal-title"
         aria-describedby="transition-modal-description"
-        open={open}
-        onClose={handleClose}
+        open={status}
+        onClose={handleonClose}
         closeAfterTransition
         BackdropComponent={Backdrop}
         BackdropProps={{
           timeout: 500,
         }}
+        handleClick={openHandle}
       >
-        <Fade in={open}>
+        <Fade in={status}>
           <Box sx={style}>
             <Typography id="transition-modal-title" variant="h6" component="h2">
-              Text in a modal
+              Report a Bug
             </Typography>
-            <Typography id="transition-modal-description" sx={{ mt: 2 }}>
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
+          <div className='bugInput'>
+            <input type='text' placeholder='id'></input>
+            <input type='text' placeholder='Severitate'></input>   {/* Combo - mediun, high, low*/}
+            <input type='text' placeholder='Prioritate'></input>   {/* Combo - mediun, high, low*/}
+            <input type='text' placeholder='Descriere'></input>
+            <input type='text' placeholder='Link'></input>
+            </div>
+            <button type='submit'>Send</button>
+            <button type='close'>Close</button>
           </Box>
         </Fade>
       </Modal>
+      {/* <button onClick={handleOpen}>CeFaci</button> */}
     </div>
   );
 }

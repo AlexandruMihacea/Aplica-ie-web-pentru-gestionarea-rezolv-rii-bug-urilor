@@ -1,7 +1,7 @@
 //import * as React from 'react';
 import React, { useState, useEffect } from 'react';
-import ModalForm from './ReportBug';
-import * as React from 'react';
+import FormBug from './FormBug';
+// import * as React from 'react';
 import '../Styles/styleReportBug.css'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -42,6 +42,14 @@ function CustomizedTables() {
   let show=false;
   //my apps
   const [app, setApp] = useState([])
+  const [open, setOpen] = useState(false)
+  const handleClick = () => {
+    setOpen(true);
+  };
+  const handleClose = () => setOpen(false);
+  
+
+
   useEffect(() => {
     //axios.get(url)
     fetch(url)
@@ -50,11 +58,7 @@ function CustomizedTables() {
       .catch(console.error);
   }, []);
 
-  const openModal = (id) => {
-    return (ev) => {
-    console.log(id)
-    }
-  }
+  
 
   if (app) {
     return (
@@ -70,7 +74,7 @@ function CustomizedTables() {
             <TableBody>
               {app.map((app) => (
                 <StyledTableRow key={app.id}>
-                  <StyledTableCell component="th" scope="row"  onClick={openModal(app.id)}>
+                  <StyledTableCell component="th" scope="row"  onClick={handleClick}>
                     {app.name}
                   </StyledTableCell>
                   {/* <Button variant="contained" >Bug</Button> */}
@@ -79,7 +83,10 @@ function CustomizedTables() {
             </TableBody>
           </Table>
         </TableContainer>
-        {show ? <ModalForm/> : null}
+                <FormBug 
+                  handleonClose={handleClose}
+                  status = {open}
+                />
       </div>
     );
   } else {

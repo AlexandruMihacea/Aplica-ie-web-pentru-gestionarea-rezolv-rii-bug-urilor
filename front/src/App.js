@@ -8,6 +8,7 @@ import UserPage from './Pages/UserPage';
 import AddProject from './Pages/AddProject';
 import MyBugs from './Pages/MyBugs';
 import DenseAppBar from './Components/NavBar'
+import FormBug from './Pages/FormBug'
 
 // Paleta culori: #171820, #fdc029, #df861d, #aa3d01, #bcb6ae
 
