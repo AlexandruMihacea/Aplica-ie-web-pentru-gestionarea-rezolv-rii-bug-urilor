@@ -1,0 +1,10 @@
+/* body{
+    background-color: rgb(12, 12, 12);
+} */
+
+.second-bloc{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
