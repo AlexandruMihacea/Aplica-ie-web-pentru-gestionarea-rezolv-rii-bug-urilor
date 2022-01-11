@@ -1,0 +1,11 @@
+.nav{
+    background-color: #171820;
+    border: 0.5px solid rgb(43, 42, 42);
+    box-shadow: 3px 1px #272827;
+}
+
+.logo{
+    border-radius: 50%;
+    width: 15rem;
+    height: 7rem;
+}

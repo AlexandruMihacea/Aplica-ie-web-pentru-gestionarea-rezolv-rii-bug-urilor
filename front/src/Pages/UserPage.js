@@ -47,8 +47,8 @@ export default function UserPage(){
     return(
         <div>
 
-          <a href="/">Plus</a>  
-          <a href="/">BugList</a>
+          <a href="/addProject">Plus</a>  
+          <a href="/myBugs">BugList</a>
     <TableContainer component={Paper}>
       <Table sx={{ minWidth: 700 }} aria-label="customized table">
         <TableHead>
