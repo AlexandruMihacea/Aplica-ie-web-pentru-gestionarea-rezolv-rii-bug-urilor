@@ -1,4 +1,7 @@
-import * as React from 'react';
+//import * as React from 'react';
+import React, { useState, useEffect } from 'react';
+import ModalForm from './ReportBug';
+
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -8,7 +11,6 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -31,55 +33,56 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   },
 }));
 
-function createData(name, calories, fat, carbs, protein) {
-  return { name, calories, fat, carbs, protein };
-}
-
-// TODO Aici face GetProject
-const rows = [
-  createData('Frozen yoghurt'),
-  createData('Ice cream sandwich'),
-  createData('Eclair'),
-  createData('Cupcake'),
-  createData('Gingerbread'),
-];
+//open modal from here with the value of the idProj
 
 
+function CustomizedTables() {
+  const url = 'http://localhost:7000/app/projects';
+  let show=false;
+  //my apps
+  const [app, setApp] = useState([])
+  useEffect(() => {
+    //axios.get(url)
+    fetch(url)
+      .then(res => res.json())
+      .then(setApp)
+      .catch(console.error);
+  }, []);
 
-export default function CustomizedTables() {
-    
-  
-  return (
+  const openModal = (id) => {
+    return (ev) => {
+    console.log(id)
+    }
+  }
+
+  if (app) {
+    return (
       <div>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Applications</StyledTableCell>
-           
-        
-            <StyledTableCell align="right">BugsAlert</StyledTableCell>
-            
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              {/* TODO Aici face PostBug */}
-              <Button variant="contained" >Bug</Button> 
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
-
-    
-    </div>
-    
-
-    
-  );
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>Applications</StyledTableCell>
+                {/* <StyledTableCell align="right">BugsAlert</StyledTableCell> */}
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {app.map((app) => (
+                <StyledTableRow key={app.id}>
+                  <StyledTableCell component="th" scope="row"  onClick={openModal(app.id)}>
+                    {app.name}
+                  </StyledTableCell>
+                  {/* <Button variant="contained" >Bug</Button> */}
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+        {show ? <ModalForm/> : null}
+      </div>
+    );
+  } else {
+    <h1>No data found.</h1>
+  }
 }
+export default CustomizedTables
