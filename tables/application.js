@@ -22,6 +22,9 @@ module.exports = (sequelize, DataTypes) => {
                     }
                 }
             },
+            repo: {
+                type:DataTypes.STRING
+            },
             id_admin: {
                 type:DataTypes.INTEGER,
                 allowNull: false

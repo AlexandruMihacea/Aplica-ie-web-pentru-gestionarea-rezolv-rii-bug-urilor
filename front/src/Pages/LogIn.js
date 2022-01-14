@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import '../Styles/styleLogIn.css'
 import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
@@ -107,7 +107,21 @@ const CssTextField = styled(TextField)({
   
 
 export default function LogIn(){
+  const [input, setInput] = useState("");
+  const [password, setPassword]= useState("");
+  const [acces, setAcces] = useState(false); //grant acces to userPage
+  
+  const handleUsername = (event) => {
+      setInput(event.target.value);
+  }
 
+  const handlePassword = (event) => {
+    setPassword(event.target.value);
+  }
+
+  const submitAction = () => {
+    
+  }
     return(
         <div className='form'>
                 <div>
@@ -120,14 +134,14 @@ export default function LogIn(){
                         gap: 2,
                     }}
                     >
-                    <CssTextField label="Nume" id="custom-css-outlined-input" />
-                    <CssTextField label="Password" id="custom-css-outlined-input" />
+                    <CssTextField label="Nume" onChange={handleUsername} id="custom-css-outlined-input" />
+                    <CssTextField label="Password" onChange={handlePassword} id="custom-css-outlined-input" />
                 </Box>
                 </div>
 
                 <div>
                 <Stack direction="row" spacing={2}>
-                <Button variant="contained" color="success">
+                <Button variant="contained" color="success" onClick={submitAction}>
                   LogIn
                 </Button>
                 </Stack>
@@ -136,8 +150,6 @@ export default function LogIn(){
                 <div>
                 <a className='create' href="/register">Creaza-ti cont!</a>
                 </div>
-               
-           
         </div>
     )
 }

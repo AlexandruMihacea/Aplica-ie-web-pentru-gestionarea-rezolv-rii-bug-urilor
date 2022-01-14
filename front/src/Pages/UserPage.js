@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from 'react';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -10,71 +10,75 @@ import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
-    [`&.${tableCellClasses.head}`]: {
-      backgroundColor: theme.palette.common.black,
-      color: theme.palette.common.white,
-    },
-    [`&.${tableCellClasses.body}`]: {
-      fontSize: 14,
-    },
-  }));
-  
-  const StyledTableRow = styled(TableRow)(({ theme }) => ({
-    '&:nth-of-type(odd)': {
-      backgroundColor: theme.palette.action.hover,
-    },
-    // hide last border
-    '&:last-child td, &:last-child th': {
-      border: 0,
-    },
-  }));
-  
-  function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-  }
-  
-  // TODO Aici face GetProject
-  const rows = [
-    createData('Frozen yoghurt'),
-    createData('Ice cream sandwich'),
-    createData('Eclair'),
-    createData('Cupcake'),
-    createData('Gingerbread'),
-  ];
+  [`&.${tableCellClasses.head}`]: {
+    backgroundColor: theme.palette.common.black,
+    color: theme.palette.common.white,
+  },
+  [`&.${tableCellClasses.body}`]: {
+    fontSize: 14,
+  },
+}));
 
-export default function UserPage(){
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  '&:nth-of-type(odd)': {
+    backgroundColor: theme.palette.action.hover,
+  },
+  '&:last-child td, &:last-child th': {
+    border: 0,
+  },
+}));
 
-    return(
-        <div>
+//TODO: verifica ce se intampla cu id1
+const id = 3;
+const url = `http://localhost:7000/app/users/${id}/projects`;
 
-          <a href="/addProject">Plus</a>  
-          <a href="/myBugs">BugList</a>
-    <TableContainer component={Paper}>
-      <Table sx={{ minWidth: 700 }} aria-label="customized table">
-        <TableHead>
-          <TableRow>
-            <StyledTableCell>Applications</StyledTableCell>
-           
-        
-            <StyledTableCell align="right"></StyledTableCell>
-            
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <StyledTableRow key={row.name}>
-              <StyledTableCell component="th" scope="row">
-                {row.name}
-              </StyledTableCell>
-              {/* TODO Aici face PostBug */}
-              <Button variant="contained" >Edit</Button> 
-            </StyledTableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </TableContainer>
+export default function UserPage() {
+  //my apps
+  const [app, setApp] = useState([])
+  useEffect(() => {
+    fetch(url)
+      .then(res => res.json())
+      .then(setApp)
+      .catch(console.error)
+  }, [])
 
-    
-    </div>
+  if (!app.message) {
+    return (
+      <div>
+        <a href="/addProject">Plus</a>
+        <a href="/myBugs">BugList</a>
+        <TableContainer component={Paper}>
+          <Table sx={{ minWidth: 700 }} aria-label="customized table">
+            <TableHead>
+              <TableRow>
+                <StyledTableCell>My applications</StyledTableCell>
+                <StyledTableCell align="right">Role</StyledTableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {app.map((item, key) => (
+                <StyledTableRow key={key}>
+                  <StyledTableCell key={`app+${item.id_app}`} component="th" scope="row">
+                    {item.name}
+                  </StyledTableCell>
+                  <StyledTableCell key={`role+${item.id_app}`} component="th" scope="row">
+                    {item.role}
+                  </StyledTableCell>
+                  {/* TODO Aici face PostBug */}
+                </StyledTableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      </div>
+    );
+  } else {
+    return (
+      <div>
+        <a href="/addProject">Plus</a>
+        <a href="/myBugs">BugList</a>
+        <h1>{app.message} :(</h1>
+      </div>
     )
+  }
 }

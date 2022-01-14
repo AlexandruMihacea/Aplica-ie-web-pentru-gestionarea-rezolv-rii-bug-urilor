@@ -176,10 +176,17 @@ router.route("/projects")
     //post new project
     .post(async (req,res,next) => {
         try {
-            if(req.body.name&&req.body.id_admin) {
+            if(req.body.name&&req.body.id_admin&&req.body.repo) {
                 const sentApp = req.body;
                 const application = await Application.create(sentApp);
                 const teamMemember  = await Team.create({id_user:application.id_admin , id_app: application.id, role: "Admin"})
+                if(req.body.team){
+                    //TODO: test the array of team and insert them as users
+                    for(let i=0;i<req.body.members.length;i++){
+                        const team = await Team.create({id_user:req.body.members[i] , id_app: application.id})
+                    }
+
+                }
                 if(teamMemember) {
                     console.log("Added entry in the Teams.");
                 }
@@ -308,8 +315,12 @@ router.route("/users/:id_user/projects")
                 const projects = await Team.findAll( {attributes: ["id_app", "role"] ,where : {
                     id_user: req.params.id_user
                 }});
+                for(let i=0;i<projects.length;i++){
+                    const app= await Application.findByPk(projects[i].id_app);
+                    projects[i].dataValues.name=app.name;
+                }
                 if(projects.length>0){
-                    res.status(200).json(projects); //proj+role, fac mapparea pe front
+                    res.status(200).json(projects); 
                 } else {
                     res.status(400).json({message: "User has no projects."});
                 }
