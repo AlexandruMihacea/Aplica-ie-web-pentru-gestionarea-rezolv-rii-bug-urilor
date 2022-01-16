@@ -1,19 +1,22 @@
 import React, { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import axios from "axios";
+import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 
-
-//TODO: id_admin e harcodat, trebuie rezolvat login-ul 
 //TODO: validations missing
 
 export default function StateTextFields() {
     const [name, setName] = useState(); //nume proiect
     const [repo, setRepo] = useState(); //repo
-    const [click, setClick] = useState(); //submit action
+    const [click, setClick] = useState(false); //submit action
     const [teamShow, setTeamShow] = useState(false); //adaugare echipa action 
-
+    const navigate = useNavigate();
+    let { id} = useParams();
+    
     //setez nume
     const handleNameChange = (event) => {
         setName(event.target.value);
@@ -23,18 +26,23 @@ export default function StateTextFields() {
         setRepo(event.target.value);
     };
 
-    //confirm submit
+    //kill me daca se face create proj fara team, desi mi se pare o prostie
     const projSend = () => {
-        setClick(true);
+        if(teamShow==false){
+            axios.post("http://localhost:7000/app/projects",
+            {
+                id_admin: id, name: name, repo: repo
+            })
+            .then((response) => { navigate(`/userPage/:${id}`) })
+        }
+        else {
+            setClick("send");
+        }
     };
     //afisez componenta de adaugare echipa
     const handleclick = () => {
         setTeamShow(teamShow ? false : true);
     };
-
-    // useEffect(() => {
-    //     console.log("rendered")
-    // }, [teamShow])
 
     return (
         <>
@@ -63,7 +71,7 @@ export default function StateTextFields() {
                 <Button variant="contained" onClick={projSend} style={{ background: "green" }}>Create project</Button>
             </Box>
             <div className="form-team">
-                {teamShow ? <Team name={name} repo={repo} submit={click} /> : null}
+                {teamShow ? <Team _name={name} _repo={repo} submit={click} _id_admin={id} /> : null}
             </div>
 
 
@@ -72,11 +80,12 @@ export default function StateTextFields() {
 }
 
 
-const Team = ({ name, repo, submit }) => {
+const Team = ({ _name, _repo, submit, _id_admin }) => {
     const [team, setTeam] = useState([]); //output autocomplete
     const [user, setUsers] = useState([]); //array de users pentru autocomplete
-    const [message, setMessage]=useState(); //mesaj de pe server, daca e ok totul
-    
+    const [message, setMessage] = useState(); //mesaj de pe server, daca e ok totul
+    const navigate = useNavigate();
+    let _team;
     //ia users de pe server
     useEffect(() => {
         fetch("http://localhost:7000/app/users")
@@ -90,21 +99,28 @@ const Team = ({ name, repo, submit }) => {
         setTeam(value)
     }
 
-    //post proiect nou
+    //ma asigur ca trimit doar cand s-a facut click pe create proj si nu cand s a randat prima data componenta
     useEffect(() => {
-        if (submit === true) {
-            const members = team.map(m => m.id)
-            const id_admin = 5;
-            const requestOptions = {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ id_admin, name, repo, members })
-            }
-            fetch("http://localhost:7000/app/projects", requestOptions)
-                .then(response=> response.json())
-                .then(data=> setMessage(data.message))
+        if(submit=="send") {
+            postProj();
+            navigate(`/userPage/:${_id_admin}`);
         }
     }, [submit])
+
+    //am luat doar id-urile pentru ca asa e facut serverul
+    const tranform = () => {
+        _team  = team.map(t => t.id);
+    }
+
+    //post new proj
+    const postProj = () => {
+        tranform();
+        axios.post("http://localhost:7000/app/projects",
+            {
+                id_admin: _id_admin, name: _name, repo: _repo, team: _team
+            })
+            .then((response) => { console.log(response) })
+    }
 
     return (
         <>
