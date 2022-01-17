@@ -3,27 +3,26 @@ import axios from "axios"
 import { alpha, styled } from '@mui/material/styles';
 import InputBase from '@mui/material/InputBase';
 import Box from '@mui/material/Box';
-import InputLabel from '@mui/material/InputLabel';
 import TextField from '@mui/material/TextField';
-import FormControl from '@mui/material/FormControl';
 import { useNavigate } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#fdc029',
+    color: '#171820',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: '#171820',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: '#aa3d01',
+      borderColor: '#171820',
     },
     '&:hover fieldset': {
       borderColor: '#fdc029',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#171820',
+      borderColor: '#fdc029',
     },
   },
 });
@@ -149,7 +148,9 @@ export default function Register() {
         <CssTextField label="Email" onChange={handleEmail} id="custom-css-outlined-input" />
       </Box>
       <div>
-        <button type="input" onClick={register}>Register</button>
+        <Button variant="contained" color="success" onClick={register}>
+            Register
+          </Button>
       </div>
     </div>
   )

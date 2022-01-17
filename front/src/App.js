@@ -8,8 +8,8 @@ import UserPage from './Pages/UserPage';
 import AddProject from './Pages/AddProject';
 import MyBugs from './Pages/MyBugs';
 import DenseAppBar from './Components/NavBar'
-import FormBug from './Pages/FormBug'
 import StateTextFields from './Pages/AddProject';
+import TestTable from './Pages/TesterPage';
 
 // Paleta culori: #171820, #fdc029, #df861d, #aa3d01, #bcb6ae
 // updated react router dom from "^5.3.0" to ^6.2.1 because i needed navigate and routes 
@@ -27,6 +27,7 @@ function App() {
             <Route path="/userPage/:id" element={<UserPage />} />
             <Route path="/addProject/:id" element={<AddProject />} />
             <Route path="/myBugs/:id" element={<MyBugs />} />
+            <Route path="/TesterPage" element={<TestTable />}/>
           </Routes>
         </div>
       </div>

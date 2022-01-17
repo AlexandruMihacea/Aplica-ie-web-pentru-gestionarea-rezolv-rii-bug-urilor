@@ -1,7 +1,8 @@
 .App{
-  /* background-color: black; */
-  background-color: #bcb6ae;
-  background-image: linear-gradient(#171820 , #bcb6ae 0%, #171820 60%);
+  /* background-color: #bcb6ae;
+  background-image: linear-gradient(#171820 , #bcb6ae 0%, #171820 60%); */
+  background-color: #171820;
+  background-image: linear-gradient(#171820 , #171820 0%, #df861d 50%);
   height: 100vh;
   width: 100%;
   display: flex;
@@ -16,9 +17,9 @@
   align-items: center;
   height: 90%;
   width: 90%;
-  background-color: rgb(223, 134, 29, 0.9);
-  border: 1px solid rgb(223, 134, 29);
+  background-color: rgb(188, 182, 174);
+  border: 1px solid rgb(188, 182, 174);
   border-radius: 10px;
-  box-shadow: rgb(170, 61, 1);
+  box-shadow: rgb(196, 165, 148);
 }
 

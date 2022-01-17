@@ -1,7 +1,5 @@
-//import * as React from 'react';
 import React, { useState, useEffect } from 'react';
 import FormBug from './FormBug';
-// import * as React from 'react';
 import '../Styles/styleReportBug.css'
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
@@ -11,7 +9,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -38,6 +36,9 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 
 
 function CustomizedTables() {
+
+  
+
   const url = 'http://localhost:7000/app/projects';
   let show=false;
   //my apps
@@ -93,4 +94,4 @@ function CustomizedTables() {
     <h1>No data found.</h1>
   }
 }
-export default CustomizedTables
+export default CustomizedTables;

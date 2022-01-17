@@ -13,20 +13,20 @@ import Button from '@mui/material/Button';
 
 const CssTextField = styled(TextField)({
   '& label.Mui-focused': {
-    color: '#fdc029',
+    color: '#171820',
   },
   '& .MuiInput-underline:after': {
     borderBottomColor: '#171820',
   },
   '& .MuiOutlinedInput-root': {
     '& fieldset': {
-      borderColor: '#aa3d01',
+      borderColor: '#171820',
     },
     '&:hover fieldset': {
       borderColor: '#fdc029',
     },
     '&.Mui-focused fieldset': {
-      borderColor: '#171820',
+      borderColor: '#fdc029',
     },
   },
 });

@@ -12,7 +12,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import '../Styles/styleUser.css';
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
   [`&.${tableCellClasses.head}`]: {
@@ -68,9 +68,11 @@ export default function UserPage() {
 
   if (app.length) {
     return (
-      <div>
-        <AddCircleIcon onClick={redirectAddProj} />
-        <BugReportIcon onClick={redirectBugList} />
+      <div className='userPg'>
+        <div className='iconUser'>
+          <AddCircleIcon onClick={redirectAddProj} style={{ fontSize: 50, color: '#171820' }}/>
+        <BugReportIcon onClick={redirectBugList} style={{ fontSize: 50, color: '#171820' }}/>
+        </div>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 700 }} aria-label="customized table">
             <TableHead>
