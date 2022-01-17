@@ -149,10 +149,14 @@ router.route('/bugs/:id')
             const bug = await Bug.findByPk(req.params.id);
             if (bug) {
                 if (Object.keys(req.body).length != 0) { //am ceva in body
-                    if (req.body.id_user) // poate arunca exceptie de sql foreign key (se ocupa next)
+                    if (req.body.id_user)  {// poate arunca exceptie de sql foreign key (se ocupa next)
                         bug.id_user = req.body.id_user;
-                    if (req.body.status)
-                        bug.status = req.body.status;
+                        bug.status = "In solutionare"; 
+                    }
+                    if (req.body.commit) {
+                        bug.link = req.body.commit;
+                        bug.status = "Solutionat"; 
+                    }
 
                     await bug.save();
                     res.status(200).json({ message: "Updated!" });

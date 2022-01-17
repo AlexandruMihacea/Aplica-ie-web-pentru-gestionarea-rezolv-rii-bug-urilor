@@ -76,7 +76,7 @@ export default function UserPage() {
             <TableHead>
               <TableRow>
                 <StyledTableCell>My applications</StyledTableCell>
-                <StyledTableCell align="right">Role</StyledTableCell>
+                <StyledTableCell>Role</StyledTableCell>
               </TableRow>
             </TableHead>
             <TableBody>

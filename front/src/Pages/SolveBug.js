@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
+import axios from "axios"
 import Typography from '@mui/material/Typography';
 
 const style = {
@@ -14,8 +15,24 @@ const style = {
     p: 4,
 };
 
-export default function SolveBug({ click }) {
-    const [visibility, setVisibility] = useState({click});
+export default function SolveBug({ closeModal, click, id_user, id_bug }) {
+    const [commit, setCommit] = useState("");
+    
+    const handleChange = (event) => {
+        setCommit(event.target.value);
+    };
+
+    const updateData = () => {
+        //post cu commit link
+        if(commit!=""){
+            axios.put(`http://localhost:7000/app/bugs/${id_bug}`, { commit: commit })
+            .then((response) => {
+              console.log(response.data);
+            })
+        }
+        closeModal();
+    }
+
     if (click) {
         return (
             <div>
@@ -24,18 +41,17 @@ export default function SolveBug({ click }) {
                         Solve bug
                     </Typography>
                     <div className='bugInput'>
-                        <input type='text' placeholder='Commit'></input>
-                        <input type='text' placeholder='Status'></input>
+                        <input type='text' placeholder='Commit' onChange={handleChange}></input>
                     </div>
-                    <button type='submit'>Send</button>
-                    <button type='close'>Close</button>
+                    <button type='submit' onClick={updateData}>Send</button>
+                    <button type='close' onClick={closeModal}>Close</button>
                 </Box>
 
             </div>
         );
     } else {
         return(
-            <div></div>
+            <div>..........</div>
         )
     }
 }
