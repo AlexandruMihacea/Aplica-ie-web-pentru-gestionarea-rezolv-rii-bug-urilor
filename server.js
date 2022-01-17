@@ -98,38 +98,51 @@ router.route('/bugs')
         }
     })
 
-
+//unde id -> pt get e de fapt id user si pentru put e id_bug.
 router.route('/bugs/:id')
-    //get one bug by id.
     .get(async (req, res, next) => {
         try {
-            const bug = await Bug.findByPk(req.params.id);
-            if (bug) {
-                return res.status(200).json(bug);
+            const user = await User.findByPk(req.params.id);
+            if (user) { //exista user-ul
+                const projects = await Team.findAll({
+                    attributes: ["id_app", "role"], where: {
+                        id_user: req.params.id
+                    }
+                });
+                for (let i = 0; i < projects.length; i++) {
+                    const app = await Application.findByPk(projects[i].id_app);
+                    projects[i].dataValues.name = app.name;
+                }
+                if (projects) {  //avem proiect, mergem sa cautam bug-urile
+                    let allBugs=[];
+                    for (let i = 0; i < projects.length; i++) {
+                        console.log("id_app=",projects[i].id_app);
+                        const Bugs = await Bug.findAll({
+                            where: {
+                                id_app: projects[i].id_app
+                            }
+                        })
+                        if(Bugs.length>0){
+                            for(let i=0;i<Bugs.length;i++){
+                                allBugs.push(Bugs[i].dataValues)
+                            }
+                        }
+                    }
+                    for (let i = 0; i < allBugs.length; i++) {
+                        const app = await Application.findByPk(allBugs[i].id_app);
+                        allBugs[i].name = app.name;
+                    }
+                    return res.status(200).json(allBugs);
+                }
             } else {
-                return res.status(404).json({ message: "Not found." });
+                return res.status(404).json({message: "User not found."});
             }
-        } catch (err) {
+        }
+        catch (err) {
             next(err);
         }
     })
 
-    .get(async (req, res, next) => {
-        try {
-            const user = await User.findByPk(req.params.id);
-            if (user) {
-                const apps = await Bug.findAll({
-                    where: {
-                        id_app: req.params.id_app
-                    }
-                })
-            }
-        }
-        catch(err) {
-                    next(err);
-                }
-    })
-           
     //update given bug (status or id_user)
     .put(async (req, res, next) => {
         try {
@@ -475,7 +488,6 @@ router.route("/team/:id_user/:id_app")
     })
 
 //#endregion
-
 
 
 //#region SERVER 

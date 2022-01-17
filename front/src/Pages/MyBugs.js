@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
+import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell, { tableCellClasses } from '@mui/material/TableCell';
@@ -11,6 +12,7 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
+import SolveBug from './SolveBug';
 
 
 const StyledTableCell = styled(TableCell)(({ theme }) => ({
@@ -33,96 +35,133 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 }));
 
 
-
+//explicatie state uri 
+// daca am un bug in aplicatie in rezolvare -> setBusy(true) -> modala incarca doar optiunea de solutionare
+// daca nu am niciun bug pot sa mi asignez unul -> setBusy(false) -> put(id_user)
+// daca bug ul este deja preluat de cineva -> setError(true)
 
 export default function MyBugs() {
   const id = useParams();
-  const [app, setApp] = useState([]);
-  const [bugs, setBugs] = useState([]); //ce afisez.
-  const [ready, setReady] = useState(false);
+  const [bugs, setBugs] = useState([]); //ce afisez
+
+  const [busy, setBusy] = useState(false);
+  const [error, setError] = useState();
+  const [click, setClick] = useState(false); //deschid modala
 
   const getData = () => {
-    axios.get(`http://localhost:7000/app/users/${id.id}/projects`)
+    axios.get(`http://localhost:7000/app/bugs/${id.id}`)
       .then((response) => {
-        setApp(response.data);
+        setBugs(response.data);
       })
+  }
+  //get data
+  useEffect(() => {
+    getData();
+  }, [])
 
-    axios.get('http://localhost:7000/app/bugs')
-    .then((response) => {
-      setBugs(response.data)
+  const validate = () => {
+    bugs.forEach(b => {
+      if (b.id_user == id.id) {
+        setBusy(true) //nu pot decat sa solutionez bug ul meu.
+      }
     })
   }
 
-
-  useEffect(() => {
+  useEffect(()=> {
     getData();
-}, [])
+  }, [click])
 
-  // useEffect(() => {
-  //   if (ready == false) {
-  //     app.map(apl => {
-  //       axios.get(`http://localhost:7000/app/projects/${apl.id_app}/bugs`)
-  //         .then((response) => {
-  //           bugss.push(response.data)
-  //         })
-  //         .catch(error => console.log(error))
-  //     })
-  //     setBugs(bugss);
-  //   }  setReady(true)
-  // }, [app])
+  const updateBug = (id_bug) => {
+    axios.put(`http://localhost:7000/app/bugs/${id_bug}`, {id_user:id.id})
+    .then ((response) => {
+        console.log(response.data);
+    })
+    setClick(true);
+  }
 
-  // useEffect(()=> {
-  //   if(ready==false){
-  //     console.log(bugs);
-  //     setReady(true);
-  //   }
-  // }, [bugs])
+  const update = (id_bug, status, id_user) => {
+    return (event) => {
+      setClick(true);
+      if (id_user === null) { //ma pot adauga pt. bug-ul selectat
+        validate(); //verific daca sunt liber sau nu
+        if (busy !== false) {
+          setError("Nu puteti detine drepturi de solutionare pe mai mult de un bug.");
+        }
+        else {
+          //pot sa ma adaug -> fac put bug
+          updateBug(id_bug);
+          setBusy(true);
+        }
+      } else {
+        if (id_user == id) { //pot sa solutionez
+          setClick(true);
+
+          setError("");
+        }
+      }
+    }
+  }
 
 
-  return (
-    <div>
-      <TableContainer component={Paper}>
-        <Table sx={{ minWidth: 700 }} aria-label="customized table">
-          <TableHead>
-            <TableRow>
-              <StyledTableCell>Application</StyledTableCell>
-              <StyledTableCell>Severitate</StyledTableCell>
-              <StyledTableCell>Prioritate</StyledTableCell>
-              <StyledTableCell>Descriere</StyledTableCell>
-              <StyledTableCell>Commit</StyledTableCell>
-              <StyledTableCell>Responsabil</StyledTableCell>
-              <StyledTableCell align="right">Status</StyledTableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bugs.map((item => item.map(element => (
-              <StyledTableRow key={element.id_bug}>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.id_app}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.severitate}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.prioritate}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.descriere}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.commit}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.id_user}
-                </StyledTableCell>
-                <StyledTableCell key={`app+${element.id_app}`} component="th" scope="row">
-                  {element.status}
-                </StyledTableCell>
-              </StyledTableRow>
-            ))))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
-  )
+  if (bugs) {
+    return (
+      <div>
+        <div>
+          <TableContainer component={Paper}>
+            <Table sx={{ minWidth: 700 }} aria-label="customized table">
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell>Application</StyledTableCell>
+                  <StyledTableCell>Severitate</StyledTableCell>
+                  <StyledTableCell>Prioritate</StyledTableCell>
+                  <StyledTableCell>Descriere</StyledTableCell>
+                  <StyledTableCell>Commit</StyledTableCell>
+                  <StyledTableCell>Responsabil</StyledTableCell>
+                  <StyledTableCell>Status</StyledTableCell>
+                  <StyledTableCell align="right">Action</StyledTableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bugs.map((element) => (
+                  <StyledTableRow key={element.id_bug}>
+                    <StyledTableCell key={`name+${element.id_bug}`} component="th" scope="row">
+                      {element.name}
+                    </StyledTableCell>
+                    <StyledTableCell key={`sev+${element.id_bug}`} component="th" scope="row">
+                      {element.severitate}
+                    </StyledTableCell>
+                    <StyledTableCell key={`pr+${element.id_bug}`} component="th" scope="row">
+                      {element.prioritate}
+                    </StyledTableCell>
+                    <StyledTableCell key={`desc+${element.id_bug}`} component="th" scope="row">
+                      {element.descriere}
+                    </StyledTableCell>
+                    <StyledTableCell key={`commit+${element.id_bug}`} component="th" scope="row">
+                      {element.commit}
+                    </StyledTableCell>
+                    <StyledTableCell key={`${element.id_bug}`} component="th" scope="row">
+                      {element.id_user}
+                    </StyledTableCell>
+                    <StyledTableCell key={`status+${element.id_bug}`} component="th" scope="row">
+                      {element.status}
+                    </StyledTableCell>
+                    <StyledTableCell key={`action+${element.id_bug}`} component="th" scope="row" onClick={update(element.id_bug, element.status, element.id_user)} >
+                      {<PersonAddIcon />}
+                    </StyledTableCell>
+                  </StyledTableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+        <div>{error}</div>
+        {/* <SolveBug click={click}/> */}
+      </div>
+    )
+  }
+  else {
+    return (
+      <div><h2>No bugs reported yet.</h2></div>
+    )
+  }
 }
