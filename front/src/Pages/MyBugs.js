@@ -46,6 +46,7 @@ export default function MyBugs() {
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState();
   const [click, setClick] = useState(false); //deschid modala
+  const [refresh, setRefresh] = useState(false); //deschid modala
 
   const [id_user, setId] = useState();
   const [id_bug, setBug] = useState();
@@ -63,9 +64,10 @@ export default function MyBugs() {
 
   useEffect(() => {
     getData();
-  }, [click])
+  }, [click, refresh])
 
   const handlerClick = () => setClick(click ? false : true);
+  const handlerRefresh= () => setRefresh(refresh? false : true);
 
   const updateBug = (id_bug) => {
     axios.put(`http://localhost:7000/app/bugs/${id_bug}`, { id_user: id.id })
@@ -95,6 +97,7 @@ export default function MyBugs() {
         else {
           updateBug(id_bug);
           setBusy(true);
+          handlerRefresh();
           setClick(false);
         }
       } else {
