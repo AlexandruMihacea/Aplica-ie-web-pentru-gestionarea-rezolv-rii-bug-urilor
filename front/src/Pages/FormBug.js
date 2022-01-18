@@ -13,6 +13,9 @@ import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
 
 //TextField
 
@@ -130,18 +133,44 @@ const style = {
 
 export default function FormBug({handleonClose, status}) {
   const [visibility, setStatus] = useState(false);
-  const openHandle = () => setStatus(true);
-  const handleClose = () => setStatus(false);
   const [severity, setSeverity] = React.useState('');
   const [priority, setPriority] = React.useState('');
+  const [description, setDescription] = useState('');
+  const [link, setLink] = useState('');
+  const [idApp, setIdApp] = useState('');
+  const navigate = useNavigate();
 
-  const handleChange1 = (event) => {
+  const handleClose = () => setStatus(false);
+
+  const openHandle = () => setStatus(true);
+
+  const handleIdApp = (event) => {
+    setIdApp(event.target.value);
+  }
+
+  const handleLink = (event) => {
+    setLink(event.target.value);
+  }
+ 
+ const handleDescription = (event) => {
+   setDescription(event.target.value);
+ }
+
+  const handleSeverity = (event) => {
     setSeverity(event.target.value);
   };
 
-  const handleChange2 = (event) => {
+  const handlePriority = (event) => {
     setPriority(event.target.value);
   };
+
+  const register = () =>{
+
+  axios.post("http://localhost:7000/app/bugs", {severitate: severity, prioritate: priority, descriere: description, link: link, id_app: idApp})
+    .then(() =>{
+      navigate('/');
+    })
+  }
 
   return (
     <div className='report'>
@@ -172,7 +201,7 @@ export default function FormBug({handleonClose, status}) {
                 gap: 2,
               }}
           >
-              <CssTextField label="Id Project"  id="custom-css-outlined-input" />
+              <CssTextField label="Id Project"  id="custom-css-outlined-input" onChange={handleIdApp}/>
               <Box sx={{ minWidth: 120 }}>
                   <FormControl fullWidth>
                     <InputLabel id="demo-simple-select-label">Severity</InputLabel>
@@ -181,11 +210,11 @@ export default function FormBug({handleonClose, status}) {
                       id="demo-simple-select"
                       value={severity}
                       label="Severity"
-                      onChange={handleChange1}
+                      onChange={handleSeverity}
                     >
-                      <MenuItem value={10}>Medium</MenuItem>
-                      <MenuItem value={20}>Hight</MenuItem>
-                      <MenuItem value={30}>Low</MenuItem>
+                      <MenuItem value={'Medium'}>Medium</MenuItem>
+                      <MenuItem value={'Hight'}>Hight</MenuItem>
+                      <MenuItem value={'Low'}>Low</MenuItem>
                     </Select>
                   </FormControl>
               </Box>
@@ -198,32 +227,28 @@ export default function FormBug({handleonClose, status}) {
                       id="demo-simple-select"
                       value={priority}
                       label="Severity"
-                      onChange={handleChange2}
+                      onChange={handlePriority}
                     >
-                      <MenuItem value={10}>Medium</MenuItem>
-                      <MenuItem value={20}>Hight</MenuItem>
-                      <MenuItem value={30}>Low</MenuItem>
+                      <MenuItem value={'Medium'}>Medium</MenuItem>
+                      <MenuItem value={'Hight'}>Hight</MenuItem>
+                      <MenuItem value={'Low'}>Low</MenuItem>
                     </Select>
                   </FormControl>
               </Box>
-              <CssTextField label="Description"  id="custom-css-outlined-input" />
-              <CssTextField label="Link Repo"  id="custom-css-outlined-input" />
+              <CssTextField label="Description"  id="custom-css-outlined-input" onChange={handleDescription}/>
+              <CssTextField label="Link Repo"  id="custom-css-outlined-input" onChange={handleLink}/>
 
           </Box>
         </div>
         
             <Stack direction="row" spacing={2}>
-              <Button variant="contained" color="success">
+              <Button variant="contained" color="success" onClick={register}>
               Send
-              </Button>
-              <Button variant="outlined" color="error">
-              Close
               </Button>
             </Stack>
           </Box>
         </Fade>
       </Modal>
-      {/* <button onClick={handleOpen}>CeFaci</button> */}
     </div>
   );
 }
