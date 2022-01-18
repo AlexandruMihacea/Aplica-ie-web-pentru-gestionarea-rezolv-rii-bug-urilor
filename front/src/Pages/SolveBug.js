@@ -133,6 +133,7 @@ export default function SolveBug({ closeModal, click, id_user, id_bug }) {
               console.log(response.data);
             })
         }
+        //setDisponibil();
         closeModal();
     }
 
@@ -156,7 +157,8 @@ export default function SolveBug({ closeModal, click, id_user, id_bug }) {
                                 justifyContent: 'center',
                             }}
                         >
-                        <CssTextField label="Commit" id="custom-css-outlined-input" />
+                        <CssTextField label="Commit" id="custom-css-outlined-input" onChange={handleChange}/>
+                        {/* <input type='text' placeholder='Commit' onChange={handleChange}></input> */}
                         </Box>
                         <Stack direction="row" spacing={2} sx={{ display: 'flex', justifyContent: 'center'}} >
                             <Button variant="contained" color="success" onClick={updateData}>

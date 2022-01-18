@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import axios from "axios"
-import { useNavigate } from 'react-router-dom';
 import { styled } from '@mui/material/styles';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
@@ -44,13 +43,12 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
 export default function MyBugs() {
   const id = useParams();
   const [bugs, setBugs] = useState([]); //ce afisez
-
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState();
   const [click, setClick] = useState(false); //deschid modala
 
-  const [ id_user, setId ] = useState();
-  const [ id_bug, setBug ] = useState();
+  const [id_user, setId] = useState();
+  const [id_bug, setBug] = useState();
 
   const getData = () => {
     axios.get(`http://localhost:7000/app/bugs/${id.id}`)
@@ -67,8 +65,7 @@ export default function MyBugs() {
     getData();
   }, [click])
 
-  //const handleClose = () => setOpen(false);
-  const handlerClick = () =>  setClick(click? false : true);
+  const handlerClick = () => setClick(click ? false : true);
 
   const updateBug = (id_bug) => {
     axios.put(`http://localhost:7000/app/bugs/${id_bug}`, { id_user: id.id })
@@ -113,7 +110,6 @@ export default function MyBugs() {
     }
   }
 
-
   if (bugs) {
     return (
       <div>
@@ -156,8 +152,8 @@ export default function MyBugs() {
                     <StyledTableCell key={`status+${element.id_bug}`} component="th" scope="row">
                       {element.status}
                     </StyledTableCell>
-                    <StyledTableCell key={`action+${element.id_bug}`} component="th" scope="row" onClick={onClick(element.id_user,element.id_bug, element.status)} >
-                      {(element.status === "Solutionat") ? null : (id.id == element.id_user) ? <AssignmentTurnedInIcon /> : <PersonAddIcon />}
+                    <StyledTableCell key={`action+${element.id_bug}`} component="th" scope="row" onClick={onClick(element.id_user, element.id_bug, element.status)} >
+                      {(element.status === "Solutionat") ? null : (id.id == element.id_user) ? <AssignmentTurnedInIcon /> : (element.status==="In solutionare") ? null : <PersonAddIcon />}
                     </StyledTableCell>
                   </StyledTableRow>
                 ))}
@@ -166,11 +162,12 @@ export default function MyBugs() {
           </TableContainer>
         </div>
         <div><SolveBug
-          closeModal = { handlerClick }
-          click = { click }
-          id_user = { id_user }
-          id_bug = { id_bug } />
+          closeModal={handlerClick}
+          click={click}
+          id_user={id_user}
+          id_bug={id_bug} />
         </div>
+        <div>{error}</div>
       </div>
     )
   }
