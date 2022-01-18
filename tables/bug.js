@@ -23,11 +23,11 @@ module.exports = (sequelize, DataTypes) => {
             },
             link: {
                 type: DataTypes.STRING,
-                validate: {
-                    isUrl: {
-                        msg: "Malformed link of commit."
-                    } 
-                }
+                // validate: {
+                //     // isUrl: {
+                //     //     msg: "Malformed link of commit."
+                //     // } 
+                // }
             },
             status: {
                 type: DataTypes.STRING,

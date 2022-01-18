@@ -212,8 +212,9 @@ export default function FormBug({handleonClose, status}) {
                       label="Severity"
                       onChange={handleSeverity}
                     >
+                     
+                      <MenuItem value={'Hight'}>High</MenuItem>
                       <MenuItem value={'Medium'}>Medium</MenuItem>
-                      <MenuItem value={'Hight'}>Hight</MenuItem>
                       <MenuItem value={'Low'}>Low</MenuItem>
                     </Select>
                   </FormControl>
@@ -229,14 +230,15 @@ export default function FormBug({handleonClose, status}) {
                       label="Severity"
                       onChange={handlePriority}
                     >
+                     
+                      <MenuItem value={'Hight'}>High</MenuItem>
                       <MenuItem value={'Medium'}>Medium</MenuItem>
-                      <MenuItem value={'Hight'}>Hight</MenuItem>
                       <MenuItem value={'Low'}>Low</MenuItem>
                     </Select>
                   </FormControl>
               </Box>
               <CssTextField label="Description"  id="custom-css-outlined-input" onChange={handleDescription}/>
-              <CssTextField label="Link Repo"  id="custom-css-outlined-input" onChange={handleLink}/>
+              <CssTextField label="Link"  id="custom-css-outlined-input" onChange={handleLink}/>
 
           </Box>
         </div>

@@ -58,7 +58,7 @@ app.use("/app", router);
 //sync database
 app.put("/", async (req, res, next) => {
     try {
-        await sequelize.sync({ alter: true }); //don't change to force
+        await sequelize.sync({ force: true }); //don't change to force
         res.send("Database sync");
     } catch (err) {
         next(err)
